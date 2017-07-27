@@ -6,19 +6,38 @@ class ChatBar extends Component {
     //console.log(this.props.currentUser)
     return (
       <footer className="chatbar">
-        <input className="chatbar-username" placeholder="Your Name (Optional)" defaultValue={this.props.name}/>
+        <input
+          id = "user"
+          className="chatbar-username"
+          placeholder="Your Name (Optional)"
+          onKeyPress={event => {
+            if (event.key === 'Enter') {
+              if (document.getElementById('user').value){
+                var user = document.getElementById('user').value;
+              } else {
+                var user = "Anonymous";
+              }
+              this.props.changeUser(user);
+            }
+          }}
+
+        />
         <input
           className="chatbar-message"
           placeholder="Type a message and hit ENTER"
           onKeyPress={event => {
             if (event.key === 'Enter') {
+              // if (document.getElementById('user').value){
+              //   var user = document.getElementById('user').value;
+              // } else {
+              //   var user = "Anonymous";
+              // }
               const message = {
                 id: Math.random(),
                 content: event.target.value,
                 username: this.props.name
                 }
-              const addMessage = this.props.addMessage;
-              addMessage(message);
+              this.props.socket.send(JSON.stringify(message))
               event.target.value = ""
             }
           }}
