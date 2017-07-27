@@ -48,24 +48,35 @@ wss.on('connection', (ws) => {
   wss.broadcast(JSON.stringify(numUsers));
   });
 
+  const color = ['black'];
   ws.on('message', (messageFromBrowser) => {
     console.log(messageFromBrowser);
     let message = JSON.parse(messageFromBrowser);
     let broadcast;
+    function changeColor(){
+      let number = Math.floor(Math.random() * 6);
+      let colorpick = ['blue', 'red', 'green', 'yellow', 'orange', 'tomato'];
+      color.splice(0,1);
+      color.push(colorpick[number]);
+    }
     switch(message.type) {
     case "postMessage":
+    console.log(color);
       broadcast = {
         type: "incomingMessage",
         id: Math.random(),
         content: message.content,
-        username: message.username
+        username: message.username,
+        color: color[0]
       }
       break;
     case "postNotification":
+      changeColor();
+      console.log(color);
       broadcast = {
         type: "incomingNotification",
         id: Math.random(),
-        content: message.content
+        content: message.content,
       }
       break;
     }

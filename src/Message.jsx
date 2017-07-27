@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 
 class Message extends Component {
   render() {
+    var colorStyle = {
+      color: this.props.color,
+    };
     console.log("Rendering <Message/>")
     if (!this.props.username){
       return (
@@ -12,7 +15,7 @@ class Message extends Component {
     } else {
       return (
         <div className="message">
-          <span className="message-username">{this.props.username}</span>
+          <span className="message-username" style={colorStyle}>{this.props.username}</span>
           <span className="message-content">{this.props.content}</span>
         </div>
       );

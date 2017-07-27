@@ -8,7 +8,9 @@ class App extends Component {
 
     this.socket = new WebSocket("ws://localhost:3001");
     this.state = {
-      currentUser: {name: "Anonymous"}, // optional. if currentUser is not defined, it means the user is Anonymous
+      currentUser: {
+      name: "Anonymous",
+      color: "blue"}, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: [{
         id: 0.00000000003,
         content: "Welcome to Chatty! Start typing!"
@@ -48,7 +50,8 @@ addMessage(message){
   const newMessage = {
     id: message.id,
     username: message.username,
-    content: message.content
+    content: message.content,
+    color: message.color
   };
   const newMessages = this.state.messages.concat(newMessage);
   this.setState({
@@ -73,14 +76,18 @@ changeUser(user){
 
 
   render() {
+    var usersStyle = {
+      float: 'right',
+      margin: '20px'
+    };
     console.log("Rendering <App/>")
     return (
       <div>
         <nav className="navbar">
           <a href="/" className="navbar-brand">Chatty</a>
-          <span>{this.state.numUsers}</span>
+          <span style={usersStyle}>{this.state.numUsers}</span>
         </nav>
-        <MessageList messages = {this.state.messages}/>
+        <MessageList messages = {this.state.messages} />
         <ChatBar name = {this.state.currentUser.name} socket={this.socket} changeUser={this.changeUser}/>
       </div>
     );
