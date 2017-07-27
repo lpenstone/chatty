@@ -8,21 +8,41 @@ class App extends Component {
 
     this.socket = new WebSocket("ws://localhost:3001");
     this.state = {
-      currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
-      messages: []
+      currentUser: {name: "Anonymous"}, // optional. if currentUser is not defined, it means the user is Anonymous
+      messages: [{
+        id: 0.00000000003,
+        content: "Welcome to Chatty! Start typing!"
+      }],
+      numUsers: 0
     }
     this.addMessage = this.addMessage.bind(this);
-    this.changeUser = this.changeUser.bind(this)
+    //this.addNotification = this.addNotification.bind(this);
+    this.changeUser = this.changeUser.bind(this);
+    this.displayUsers = this.displayUsers.bind(this);
 }
 
   componentDidMount() {
-    // this.socket.onopen = (event) => {
-    //   event.target.send("Here's some text that the server is urgently awaiting!");
-    // };
     this.socket.onmessage = (message) => {
-      this.addMessage(JSON.parse(message.data));
+      var recieved = JSON.parse(message.data);
+      switch(recieved.type) {
+      case "incomingMessage":
+        this.addMessage(recieved);
+        break;
+      case "incomingNotification":
+        this.addMessage(recieved);
+        break;
+      case "incomingNumUsers":
+        this.displayUsers(recieved);
+        break;
+      }
     }
   }
+
+displayUsers(users){
+  this.setState({
+    numUsers: users.content + " User(s) Online"
+  });
+}
 
 addMessage(message){
   const newMessage = {
@@ -36,6 +56,17 @@ addMessage(message){
   });
 }
 
+// addNotification(notification){
+//   const newNotif = {
+//     id: Math.random(),
+//     content: notification.content
+//   };
+//   const newNotifs = this.state.notifications.concat(newNotif);
+//   this.setState({
+//     notifications: newNotifs
+//   });
+// }
+
 changeUser(user){
   this.setState({currentUser: {name: user}});
 }
@@ -43,24 +74,13 @@ changeUser(user){
 
   render() {
     console.log("Rendering <App/>")
-    // const addMessage = (message, socket) => {
-    //   const newMessage = {
-    //     id: message.id,
-    //     username: message.username,
-    //     content: message.content
-    //   };
-    //   const newMessages = this.state.messages.concat(newMessage);
-    //   this.setState({
-    //     messages: newMessages
-    //   });
-    //   //this.socket.send(JSON.stringify(message));
-    // }
     return (
       <div>
         <nav className="navbar">
           <a href="/" className="navbar-brand">Chatty</a>
+          <span>{this.state.numUsers}</span>
         </nav>
-        <MessageList messages = {this.state.messages} />
+        <MessageList messages = {this.state.messages}/>
         <ChatBar name = {this.state.currentUser.name} socket={this.socket} changeUser={this.changeUser}/>
       </div>
     );
