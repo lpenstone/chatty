@@ -8,20 +8,17 @@ class App extends Component {
 
     this.socket = new WebSocket("ws://localhost:3001");
     this.state = {
-      currentUser: {
-      name: "Anonymous",
-      color: "blue"}, // optional. if currentUser is not defined, it means the user is Anonymous
+      currentUser: {name: "Anonymous"}, // if currentUser is not defined, it means the user is Anonymous
       messages: [{
-        id: 0.00000000003,
+        id: 1,
         content: "Welcome to Chatty! Start typing!"
       }],
       numUsers: 0
     }
     this.addMessage = this.addMessage.bind(this);
-    //this.addNotification = this.addNotification.bind(this);
     this.changeUser = this.changeUser.bind(this);
     this.displayUsers = this.displayUsers.bind(this);
-}
+  }
 
   componentDidMount() {
     this.socket.onmessage = (message) => {
@@ -40,39 +37,28 @@ class App extends Component {
     }
   }
 
-displayUsers(users){
-  this.setState({
-    numUsers: users.content + " User(s) Online"
-  });
-}
+  displayUsers(users){
+    this.setState({
+      numUsers: users.content + " User(s) Online"
+    });
+  }
 
-addMessage(message){
-  const newMessage = {
-    id: message.id,
-    username: message.username,
-    content: message.content,
-    color: message.color
-  };
-  const newMessages = this.state.messages.concat(newMessage);
-  this.setState({
-    messages: newMessages
-  });
-}
+  addMessage(message){
+    const newMessage = {
+      id: message.id,
+      username: message.username,
+      content: message.content,
+      color: message.color
+    };
+    const newMessages = this.state.messages.concat(newMessage);
+    this.setState({
+      messages: newMessages
+    });
+  }
 
-// addNotification(notification){
-//   const newNotif = {
-//     id: Math.random(),
-//     content: notification.content
-//   };
-//   const newNotifs = this.state.notifications.concat(newNotif);
-//   this.setState({
-//     notifications: newNotifs
-//   });
-// }
-
-changeUser(user){
-  this.setState({currentUser: {name: user}});
-}
+  changeUser(user){
+    this.setState({currentUser: {name: user}});
+  }
 
 
   render() {

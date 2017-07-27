@@ -1,5 +1,3 @@
-// server.js
-
 const express = require('express');
 const SocketServer = require('ws');
 
@@ -15,10 +13,6 @@ const server = express()
 // Create the WebSockets server
 const wss = new SocketServer.Server({ server });
 
-// Set up a callback that will run when a client connects to the server
-// When a client connects they are assigned a socket, represented by
-// the ws parameter in the callback.
-
 wss.broadcast = function broadcast(data) {
   wss.clients.forEach((client) => {
     if (client.readyState === SocketServer.OPEN) {
@@ -27,40 +21,50 @@ wss.broadcast = function broadcast(data) {
   });
 };
 
-let i = 0;
+//Initially set number of users to 0
+let users = 0;
+
 wss.on('connection', (ws) => {
   console.log('Client connected');
-  i++;
-  console.log(i);
+  //Increase number of users when socket opens, and braodcast
+  users++;
+  let numUsers = {
+    type: "incomingNumUsers",
+    content: users
+  }
+  wss.broadcast(JSON.stringify(numUsers));
 
-  let numUsers = {
-    type: "incomingNumUsers",
-    content: i
+  //no colour initially set
+  let color = ['none'];
+  //function to change 'none' to a random color
+  function assignColor(){
+    let number = Math.floor(Math.random() * 6);
+    let colorpick = ['blue', 'red', 'green', 'yellow', 'orange', 'tomato'];
+    color[0] = colorpick[number];
   }
-  wss.broadcast(JSON.stringify(numUsers));
-  // Set up a callback for when a client closes the socket. This usually means they closed their browser.
-  ws.on('close', () => {console.log('Client disconnected')
-  i--;
-  let numUsers = {
-    type: "incomingNumUsers",
-    content: i
+  //if there is no colour set, assign a colour
+  console.log(color[0]);
+  if (color[0] === 'none') {
+    assignColor();
   }
-  wss.broadcast(JSON.stringify(numUsers));
+
+  // Callback when client closes socket, reduce number of users and broadcast
+  ws.on('close', () => {
+    console.log('Client disconnected')
+    users--;
+    let numUsers = {
+      type: "incomingNumUsers",
+      content: users
+    }
+    wss.broadcast(JSON.stringify(numUsers));
   });
 
-  const color = ['black'];
+  // Callback when something is sent from browser
   ws.on('message', (messageFromBrowser) => {
-    console.log(messageFromBrowser);
     let message = JSON.parse(messageFromBrowser);
     let broadcast;
-    function changeColor(){
-      let number = Math.floor(Math.random() * 6);
-      let colorpick = ['blue', 'red', 'green', 'yellow', 'orange', 'tomato'];
-      color.splice(0,1);
-      color.push(colorpick[number]);
-    }
     switch(message.type) {
-    case "postMessage":
+    case "postMessage": //If a user sends a message (send message)
     console.log(color);
       broadcast = {
         type: "incomingMessage",
@@ -70,8 +74,7 @@ wss.on('connection', (ws) => {
         color: color[0]
       }
       break;
-    case "postNotification":
-      changeColor();
+    case "postNotification": //If a user changes their name (send notification)
       console.log(color);
       broadcast = {
         type: "incomingNotification",
@@ -80,7 +83,6 @@ wss.on('connection', (ws) => {
       }
       break;
     }
-
     wss.broadcast(JSON.stringify(broadcast));
-    });
+  });
 });
