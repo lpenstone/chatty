@@ -39,7 +39,7 @@ wss.on('connection', (ws) => {
   //function to change 'none' to a random color
   function assignColor(){
     let number = Math.floor(Math.random() * 6);
-    let colorpick = ['blue', 'red', 'green', 'yellow', 'orange', 'tomato'];
+    let colorpick = ['blue', 'red', 'green', 'purple', 'orange', 'tomato'];
     color[0] = colorpick[number];
   }
   //if there is no colour set, assign a colour

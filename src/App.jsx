@@ -44,11 +44,20 @@ class App extends Component {
   }
 
   addMessage(message){
+    let regexp = /(https?:\/\/.*\.(?:png|jpg|gif))/i;
+    let anymatch = message.content.match(regexp);
+    let photoUrl = null;
+    let fullMessage = message.content;
+    if (anymatch){
+      photoUrl = anymatch[0];
+      fullMessage = fullMessage.replace(anymatch[0], "");
+    }
     const newMessage = {
       id: message.id,
       username: message.username,
-      content: message.content,
-      color: message.color
+      content: fullMessage,
+      color: message.color,
+      photo: photoUrl
     };
     const newMessages = this.state.messages.concat(newMessage);
     this.setState({

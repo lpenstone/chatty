@@ -5,6 +5,10 @@ class Message extends Component {
     var colorStyle = {
       color: this.props.color,
     };
+    var alignStyle = {
+      display: 'inline-block',
+      'padding-left': '23.5%'
+    }
     console.log("Rendering <Message/>")
     if (!this.props.username){
       return (
@@ -13,12 +17,21 @@ class Message extends Component {
         </div>
       );
     } else {
-      return (
+      if (this.props.photo){ //If there's a photo, include in return
+        return (
         <div className="message">
           <span className="message-username" style={colorStyle}>{this.props.username}</span>
-          <span className="message-content">{this.props.content}</span>
+          <span className="message-content">{this.props.content}<br/><img src={this.props.photo} width='60%'/></span>
         </div>
-      );
+        );
+      } else { //If there's no photo, return a regular message
+        return (
+          <div className="message">
+            <span className="message-username" style={colorStyle}>{this.props.username}</span>
+            <span className="message-content">{this.props.content}</span>
+          </div>
+        );
+      }
     }
   }
 }

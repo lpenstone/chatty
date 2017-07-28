@@ -3,7 +3,6 @@ import React, {Component} from 'react';
 class ChatBar extends Component {
   render() {
     console.log("Rendering <ChatBar/>")
-    //console.log(this.props.currentUser)
     return (
       <footer className="chatbar">
         <input
