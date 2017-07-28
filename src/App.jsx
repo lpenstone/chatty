@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import ChatBar from './ChatBar.jsx';
 import MessageList from './MessageList.jsx';
+const uuidv4 = require('uuid/v4');
 
 class App extends Component {
   constructor(props) {
@@ -10,7 +11,7 @@ class App extends Component {
     this.state = {
       currentUser: {name: "Anonymous"}, // if currentUser is not defined, it means the user is Anonymous
       messages: [{
-        id: 1,
+        id: uuidv4(),
         content: "Welcome to Chatty! Start typing!"
       }],
       numUsers: 0

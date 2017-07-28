@@ -1,5 +1,6 @@
 const express = require('express');
 const SocketServer = require('ws');
+const uuidv4 = require('uuid/v4');
 
 // Set the port to 3001
 const PORT = 3001;
@@ -68,7 +69,7 @@ wss.on('connection', (ws) => {
     console.log(color);
       broadcast = {
         type: "incomingMessage",
-        id: Math.random(),
+        id: uuidv4(),
         content: message.content,
         username: message.username,
         color: color[0]
@@ -78,7 +79,7 @@ wss.on('connection', (ws) => {
       console.log(color);
       broadcast = {
         type: "incomingNotification",
-        id: Math.random(),
+        id: uuidv4(),
         content: message.content,
       }
       break;
