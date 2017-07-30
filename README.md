@@ -34,12 +34,12 @@ This program should be used in the browser to communicate with others on the web
   - webpack-dev-server: 2.3.0
 
 ## Final Product
-###Single page appication:
+### Single page appication:
   - Displays number of users
   - Each user has an assigned colour
   - Users can change their name
 !["Homepage, Tweet form hidden."](https://github.com/lpenstone/chatty/blob/master/images/chatty-general-chat.png?raw=true)
-###Send images:
+### Send images:
   - Send as URL
   - Image renders immediately for viewing
 !["Send photos as URL"](https://github.com/lpenstone/chatty/blob/master/images/chatty-photosharing-1.png?raw=true)
