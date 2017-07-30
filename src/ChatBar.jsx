@@ -2,14 +2,13 @@ import React, {Component} from 'react';
 
 class ChatBar extends Component {
   render() {
-    console.log("Rendering <ChatBar/>")
     return (
       <footer className="chatbar">
         <input
           id = "user"
           className="chatbar-username"
           placeholder="Your Name (Optional)"
-          onBlur={event => {
+          onBlur={event => { //When the name box blurs, set the new name, send to websocket
             if (document.getElementById('user').value && document.getElementById('user').value !== this.props.name){
               var initialUser = this.props.name;
               var user = "";
@@ -30,7 +29,7 @@ class ChatBar extends Component {
         <input
           className="chatbar-message"
           placeholder="Type a message and hit ENTER"
-          onKeyPress={event => {
+          onKeyPress={event => { //When user presses ENTER, set new message, send to websockt
             if (event.key === 'Enter') {
               const message = {
                 type: "postMessage",

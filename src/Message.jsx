@@ -17,7 +17,7 @@ class Message extends Component {
         </div>
       );
     } else {
-      if (this.props.photo){ //If there's a photo, include in return
+      if (this.props.photo){ //If there's a photo, render for display
         return (
         <div className="message">
           <span className="message-username" style={colorStyle}>{this.props.username}</span>

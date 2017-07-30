@@ -7,14 +7,14 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.socket = new WebSocket("ws://localhost:3001");
+    this.socket = new WebSocket("ws://localhost:3001"); //connect to websocket
     this.state = {
-      currentUser: {name: "Anonymous"}, // if currentUser is not defined, it means the user is Anonymous
+      currentUser: {name: "Anonymous"}, // user initially set as Anonymous
       messages: [{
         id: uuidv4(),
         content: "Welcome to Chatty! Start typing!"
       }],
-      numUsers: 0
+      numUsers: 0 //Initial number of users on the app is zero
     }
     this.addMessage = this.addMessage.bind(this);
     this.changeUser = this.changeUser.bind(this);
@@ -22,6 +22,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    //When message is recived, check the type, and execute functions accordingly
     this.socket.onmessage = (message) => {
       var recieved = JSON.parse(message.data);
       switch(recieved.type) {
@@ -38,45 +39,46 @@ class App extends Component {
     }
   }
 
+  //Change number of users online
   displayUsers(users){
     this.setState({
       numUsers: users.content + " User(s) Online"
     });
   }
 
+  //Add message to chat
   addMessage(message){
-    let regexp = /(https?:\/\/.*\.(?:png|jpg|gif))/i;
-    let anymatch = message.content.match(regexp);
-    let photoUrl = null;
+    let regexp = /(https?:\/\/.*\.(?:png|jpg|gif))/i; //regular exp to check for photo
+    let anyphoto = message.content.match(regexp); //assign photo url to variable
+    let photoUrl = null; //Assume no photo
     let fullMessage = message.content;
-    if (anymatch){
-      photoUrl = anymatch[0];
-      fullMessage = fullMessage.replace(anymatch[0], "");
+    if (anyphoto){ //If there is a photo in the message, assign photoURL
+      photoUrl = anyphoto[0];
+      fullMessage = fullMessage.replace(anyphoto[0], "");
     }
-    const newMessage = {
+    const newMessage = { //Put together new message
       id: message.id,
       username: message.username,
       content: fullMessage,
       color: message.color,
       photo: photoUrl
     };
-    const newMessages = this.state.messages.concat(newMessage);
+    const newMessages = this.state.messages.concat(newMessage); //Add the new message to the set.state
     this.setState({
       messages: newMessages
     });
   }
 
+  //Change user's name
   changeUser(user){
     this.setState({currentUser: {name: user}});
   }
-
 
   render() {
     var usersStyle = {
       float: 'right',
       margin: '20px'
     };
-    console.log("Rendering <App/>")
     return (
       <div>
         <nav className="navbar">
