@@ -1,7 +1,7 @@
 # Chatty
 
 ## About the Project
-Simple web application built with Node, React.js, HTML5, and CSS3.
+Simple web application built with Javascript, React.js, HTML5, and CSS3.
 
 ### Problem Statement
 
